@@ -1,5 +1,20 @@
 print("Welcome to your To-Do List!")
+import os
+
+TASKS_FILE = "tasks.txt"
 tasks = []
+
+def load_tasks():
+    if os.path.exists(TASKS_FILE):
+        with open(TASKS_FILE, "r") as file:
+            for line in file:
+                tasks.append(line.strip())
+
+def save_tasks():
+    print("Saving tasks...")  # Add this line
+    with open(TASKS_FILE, "w") as file:
+        for task in tasks:
+            file.write(task + "\n")
 
 def display_menu():
     print("\n📋 To-Do List Menu:")
@@ -20,6 +35,7 @@ def add_task():
     task = input("Enter a new task: ").strip()
     if task:
         tasks.append(task)
+        save_tasks()
         print(f"Task added: {task}")
     else:
         print("Cannot add an empty task.")
@@ -32,6 +48,7 @@ def delete_task():
         index = int(input("Enter the number of the task to delete: "))
         if 1 <= index <= len(tasks):
             removed = tasks.pop(index - 1)
+            save_tasks()
             print(f"Deleted: {removed}")
         else:
             print("Invalid task number.")
@@ -39,6 +56,7 @@ def delete_task():
         print("Please enter a number.")
 
 def main():
+    load_tasks()
     while True:
         display_menu()
         choice = input("Choose an option (1-4): ").strip()
